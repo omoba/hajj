@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity 4 – Review Questions</title>
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #fffbeb, #ffffff, #fefce8);
+    color: #1f2937;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+.page {
+    max-width: 960px;
+    margin: auto;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 24px;
+    padding: 10px 20px;
+    background: #b45309;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.back-btn:hover { background: #92400e; }
+
+header {
+    text-align: center;
+    padding: 20px 0 32px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    color: #b45309;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.05rem;
+    color: #374151;
+    line-height: 1.8;
+}
+
+#quiz-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 700px) {
+    #quiz-container { grid-template-columns: 1fr; }
+}
+
+.question {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #fef3c7;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+}
+
+.question-text {
+    font-size: 1.05rem;
+    font-weight: bold;
+    margin-bottom: 14px;
+    line-height: 1.7;
+    color: #1f2937;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.option-btn {
+    text-align: left;
+    padding: 12px 18px;
+    font-size: 1rem;
+    border: 2px solid #fde68a;
+    border-radius: 10px;
+    background: #fffbeb;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #1f2937;
+}
+
+.option-btn:hover { background: #fef3c7; border-color: #f59e0b; }
+
+.option-btn.selected { background: #b45309; border-color: #b45309; color: white; }
+.option-btn.correct  { background: #16a34a; border-color: #16a34a; color: white; }
+.option-btn.wrong    { background: #dc2626; border-color: #dc2626; color: white; }
+.option-btn.reveal-correct { background: #16a34a; border-color: #16a34a; color: white; }
+
+.submit-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #b45309;
+    color: white;
+    transition: 0.2s;
+    margin-bottom: 20px;
+}
+
+.submit-btn:disabled { background: #d1d5db; color: #9ca3af; cursor: not-allowed; }
+.submit-btn:not(:disabled):hover { background: #92400e; }
+
+.quiz-result {
+    padding: 20px 24px;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    display: none;
+    margin-bottom: 20px;
+}
+
+.quiz-result.show { display: block; }
+.quiz-result.pass { background: #dcfce7; border-left: 6px solid #16a34a; color: #15803d; }
+.quiz-result.fail { background: #fef2f2; border-left: 6px solid #dc2626; color: #b91c1c; }
+
+.retry-btn {
+    display: none;
+    margin: 0 auto;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: bold;
+    background: white;
+    color: #b45309;
+    border: 2px solid #b45309;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.retry-btn:hover { background: #fef3c7; }
+.retry-btn.show { display: block; }
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <a class="back-btn" href="index3.html">← Back to Hajj for Kids</a>
+
+    <header>
+        <h1>📝 Activity 4 — Review Questions</h1>
+        <p>Answer all 10 questions about Hajj, then click <strong>Submit Quiz</strong> to see your score!</p>
+    </header>
+
+    <div id="quiz-container"></div>
+
+    <button class="submit-btn" id="submit-btn" disabled>Submit Quiz</button>
+    <div class="quiz-result" id="quiz-result"></div>
+    <button class="retry-btn" id="retry-btn" onclick="resetQuiz()">🔄 Try Again</button>
+
+</div>
+
+<script>
+
+const questions = [
+    { text: "1. Which pillar of Islam is Hajj?", options: ["2nd","3rd","4th","5th"], answer: "5th" },
+    { text: "2. In which city do Muslims perform Hajj?", options: ["Cairo","Medina","Mecca","Jerusalem"], answer: "Mecca" },
+    { text: "3. How many times do pilgrims circle the Kaaba during Tawaf?", options: ["3","5","7","10"], answer: "7" },
+    { text: "4. What do pilgrims throw at the Jamarat?", options: ["Sand","Water","Dates","Pebbles"], answer: "Pebbles" },
+    { text: "5. What is the name of the simple white cloth worn by male pilgrims?", options: ["Thobe","Ihram","Abaya","Keffiyeh"], answer: "Ihram" },
+    { text: "6. On which day do pilgrims gather at Mount Arafat?", options: ["8th Dhul Hijjah","9th Dhul Hijjah","10th Dhul Hijjah","11th Dhul Hijjah"], answer: "9th Dhul Hijjah" },
+    { text: "7. Between which two hills do pilgrims perform Sa'i?", options: ["Arafat and Mina","Safa and Marwah","Uhud and Hira","Thawr and Nur"], answer: "Safa and Marwah" },
+    { text: "8. Who does Sa'i commemorate?", options: ["Prophet Ibrahim (AS)","Prophet Ismail (AS)","Hajar (AS)","Prophet Muhammad ﷺ"], answer: "Hajar (AS)" },
+    { text: "9. How many times do pilgrims walk between Safa and Marwah during Sa'i?", options: ["3","5","7","9"], answer: "7" },
+    { text: "10. What is the lesson of Tawaf around the Kaaba?", options: ["Patience and fasting","Unity, worship, and obedience to Allah","Rejecting Shaytan","Seeking forgiveness"], answer: "Unity, worship, and obedience to Allah" }
+];
+
+let userAnswers = new Array(questions.length).fill(null);
+
+const quizContainer = document.getElementById("quiz-container");
+const submitBtn = document.getElementById("submit-btn");
+const quizResult = document.getElementById("quiz-result");
+const retryBtn = document.getElementById("retry-btn");
+
+function buildQuiz() {
+    quizContainer.innerHTML = "";
+    userAnswers = new Array(questions.length).fill(null);
+    submitBtn.disabled = true;
+    quizResult.className = "quiz-result";
+    retryBtn.className = "retry-btn";
+
+    questions.forEach(function(q, qIndex) {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `<div class="question-text">${q.text}</div><div class="options" id="options-${qIndex}"></div>`;
+        quizContainer.appendChild(div);
+
+        q.options.forEach(function(opt) {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.textContent = opt;
+            btn.onclick = function() {
+                userAnswers[qIndex] = opt;
+                document.querySelectorAll(`#options-${qIndex} .option-btn`).forEach(b => b.classList.remove("selected"));
+                btn.classList.add("selected");
+                if (userAnswers.every(a => a !== null)) submitBtn.disabled = false;
+            };
+            document.getElementById(`options-${qIndex}`).appendChild(btn);
+        });
+    });
+}
+
+submitBtn.onclick = function() {
+    let score = 0;
+    questions.forEach(function(q, qIndex) {
+        document.querySelectorAll(`#options-${qIndex} .option-btn`).forEach(function(btn) {
+            btn.disabled = true;
+            btn.classList.remove("selected");
+            if (btn.textContent === q.answer) btn.classList.add("reveal-correct");
+            if (btn.textContent === userAnswers[qIndex] && userAnswers[qIndex] !== q.answer) btn.classList.add("wrong");
+            if (btn.textContent === userAnswers[qIndex] && userAnswers[qIndex] === q.answer) btn.classList.add("correct");
+        });
+        if (userAnswers[qIndex] === q.answer) score++;
+    });
+
+    submitBtn.disabled = true;
+    quizResult.classList.add("show");
+    retryBtn.classList.add("show");
+
+    if (score >= 7) {
+        quizResult.classList.add("pass");
+        quizResult.innerHTML = `🌟 Excellent! You scored <strong>${score} / ${questions.length}</strong>. Great job learning about Hajj!`;
+    } else {
+        quizResult.classList.add("fail");
+        quizResult.innerHTML = `📖 You scored <strong>${score} / ${questions.length}</strong>. Review the material and try again!`;
+    }
+};
+
+function resetQuiz() {
+    buildQuiz();
+}
+
+buildQuiz();
+
+</script>
+</body>
+</html>

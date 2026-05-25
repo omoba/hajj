@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity 2 – Arrange the Hajj Rites</title>
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #fffbeb, #ffffff, #fefce8);
+    color: #1f2937;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+.page {
+    max-width: 860px;
+    margin: auto;
+}
+
+header {
+    text-align: center;
+    padding: 32px 0 24px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    color: #b45309;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.05rem;
+    color: #374151;
+    line-height: 1.8;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background: #b45309;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.back-btn:hover { background: #92400e; }
+
+.instructions {
+    background: #fef3c7;
+    border-left: 6px solid #f59e0b;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #374151;
+}
+
+#sort-area {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.sort-card {
+    background: white;
+    border: 2px solid #fde68a;
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: grab;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    transition: box-shadow 0.2s, border-color 0.2s;
+    user-select: none;
+}
+
+.sort-card:active { cursor: grabbing; }
+
+.sort-card.dragging {
+    opacity: 0.4;
+    border-color: #b45309;
+}
+
+.sort-card.drag-over {
+    border-color: #b45309;
+    box-shadow: 0 0 0 3px #fde68a;
+}
+
+.sort-card.correct {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+
+.sort-card.wrong {
+    border-color: #dc2626;
+    background: #fef2f2;
+}
+
+.drag-handle {
+    font-size: 1.4rem;
+    color: #b45309;
+    flex-shrink: 0;
+}
+
+.card-num {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #b45309;
+    min-width: 32px;
+    flex-shrink: 0;
+}
+
+.card-body { flex: 1; }
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.card-status {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    min-width: 28px;
+    text-align: center;
+}
+
+.btn-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.check-btn {
+    padding: 14px 32px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    background: #b45309;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.check-btn:hover { background: #92400e; }
+
+.reset-btn {
+    padding: 14px 32px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    background: white;
+    color: #b45309;
+    border: 2px solid #b45309;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.reset-btn:hover { background: #fef3c7; }
+
+#result-box {
+    display: none;
+    padding: 20px 24px;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#result-box.pass {
+    display: block;
+    background: #dcfce7;
+    border-left: 6px solid #16a34a;
+    color: #15803d;
+}
+
+#result-box.fail {
+    display: block;
+    background: #fef2f2;
+    border-left: 6px solid #dc2626;
+    color: #b91c1c;
+}
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <a class="back-btn" href="index3.html">← Back to Hajj for Kids</a>
+
+    <header>
+        <h1>🧩 Activity 2</h1>
+        <p>Arrange the Hajj rite cards in the correct order — from <strong>Entering Ihram</strong> all the way to <strong>Stoning the Jamarat</strong>.</p>
+    </header>
+
+    <div class="instructions">
+        🖱️ <strong>Drag and drop</strong> the cards below to put them in the correct order.<br>
+        When you're done, click <strong>Check My Order</strong> to see how you did!
+    </div>
+
+    <div id="sort-area"></div>
+
+    <div class="btn-row">
+        <button class="check-btn" onclick="checkOrder()">✅ Check My Order</button>
+        <button class="reset-btn" onclick="resetActivity()">🔄 Shuffle Again</button>
+    </div>
+
+    <div id="result-box"></div>
+
+</div>
+
+<script>
+
+const correctOrder = [
+    { title: "Entering Ihram",               day: "8th Dhul Hijjah"              },
+    { title: "Tawaf Around the Kaaba",        day: "8th Dhul Hijjah"              },
+    { title: "Sa'i Between Safa and Marwah",  day: "8th Dhul Hijjah"              },
+    { title: "Staying in Mina",               day: "8th Dhul Hijjah"              },
+    { title: "Day of Arafah",                 day: "9th Dhul Hijjah"              },
+    { title: "Muzdalifah",                    day: "Night of 9th / 10th Dhul Hijjah" },
+    { title: "Stoning the Jamarat & Eid al-Adha", day: "10th Dhul Hijjah"        },
+    { title: "Days of Mina",                  day: "11th–13th Dhul Hijjah"        }
+];
+
+let dragSrc = null;
+
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    // make sure it's not already in correct order
+    const same = a.every((item, i) => item.title === correctOrder[i].title);
+    return same ? shuffle(arr) : a;
+}
+
+function buildCards(items) {
+    const area = document.getElementById("sort-area");
+    area.innerHTML = "";
+
+    items.forEach(function(item) {
+        const card = document.createElement("div");
+        card.className = "sort-card";
+        card.draggable = true;
+        card.dataset.title = item.title;
+
+        card.innerHTML = `
+            <div class="drag-handle">☰</div>
+            <div class="card-num"></div>
+            <div class="card-body">
+                <div class="card-title">${item.title}</div>
+            </div>
+            <div class="card-status"></div>
+        `;
+
+        card.addEventListener("dragstart", function() {
+            dragSrc = card;
+            setTimeout(() => card.classList.add("dragging"), 0);
+        });
+
+        card.addEventListener("dragend", function() {
+            card.classList.remove("dragging");
+            card.classList.remove("drag-over");
+            updateNumbers();
+        });
+
+        card.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            if (card !== dragSrc) card.classList.add("drag-over");
+        });
+
+        card.addEventListener("dragleave", function() {
+            card.classList.remove("drag-over");
+        });
+
+        card.addEventListener("drop", function(e) {
+            e.preventDefault();
+            card.classList.remove("drag-over");
+            if (dragSrc && dragSrc !== card) {
+                const cards = [...area.querySelectorAll(".sort-card")];
+                const srcIdx = cards.indexOf(dragSrc);
+                const tgtIdx = cards.indexOf(card);
+                if (srcIdx < tgtIdx) {
+                    area.insertBefore(dragSrc, card.nextSibling);
+                } else {
+                    area.insertBefore(dragSrc, card);
+                }
+                updateNumbers();
+            }
+        });
+
+        area.appendChild(card);
+    });
+
+    updateNumbers();
+    resetStyles();
+    document.getElementById("result-box").className = "";
+    document.getElementById("result-box").style.display = "none";
+}
+
+function updateNumbers() {
+    const cards = document.querySelectorAll(".sort-card");
+    cards.forEach(function(card, i) {
+        card.querySelector(".card-num").textContent = (i + 1) + ".";
+    });
+}
+
+function resetStyles() {
+    document.querySelectorAll(".sort-card").forEach(function(card) {
+        card.classList.remove("correct", "wrong");
+        card.querySelector(".card-status").textContent = "";
+    });
+}
+
+function checkOrder() {
+    const cards = document.querySelectorAll(".sort-card");
+    let correct = 0;
+
+    cards.forEach(function(card, i) {
+        card.classList.remove("correct", "wrong");
+        if (card.dataset.title === correctOrder[i].title) {
+            card.classList.add("correct");
+            card.querySelector(".card-status").textContent = "✅";
+            correct++;
+        } else {
+            card.classList.add("wrong");
+            card.querySelector(".card-status").textContent = "❌";
+        }
+    });
+
+    const resultBox = document.getElementById("result-box");
+    if (correct === correctOrder.length) {
+        resultBox.className = "pass";
+        resultBox.innerHTML = "🌟 Perfect! You arranged all " + correct + " rites in the correct order. Excellent work!";
+    } else {
+        resultBox.className = "fail";
+        resultBox.innerHTML = "📖 You got <strong>" + correct + " / " + correctOrder.length + "</strong> correct. The ✅ cards are in the right place. Try moving the ❌ ones!";
+    }
+}
+
+function resetActivity() {
+    buildCards(shuffle(correctOrder));
+}
+
+// Start with shuffled cards
+buildCards(shuffle(correctOrder));
+
+</script>
+</body>
+</html>

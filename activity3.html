@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity 3 – Talbiyah</title>
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #fffbeb, #ffffff, #fefce8);
+    color: #1f2937;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+.page {
+    max-width: 700px;
+    margin: auto;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 24px;
+    padding: 10px 20px;
+    background: #b45309;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.back-btn:hover { background: #92400e; }
+
+header {
+    text-align: center;
+    padding: 20px 0 32px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    color: #b45309;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.05rem;
+    color: #374151;
+    line-height: 1.8;
+}
+
+.player-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border: 1px solid #fef3c7;
+    padding: 40px 32px;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.audio-icon {
+    font-size: 5rem;
+    margin-bottom: 16px;
+}
+
+.audio-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #b45309;
+    margin-bottom: 6px;
+}
+
+.audio-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 32px;
+}
+
+/* Progress bar */
+.progress-wrap {
+    width: 100%;
+    height: 8px;
+    background: #fef3c7;
+    border-radius: 999px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #b45309;
+    border-radius: 999px;
+    transition: width 0.3s linear;
+    pointer-events: none;
+}
+
+.time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #9ca3af;
+    margin-bottom: 32px;
+}
+
+/* Buttons */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.ctrl-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+.ctrl-btn:hover { transform: scale(1.1); }
+
+.ctrl-btn .icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: background 0.2s;
+}
+
+.ctrl-btn.play-btn .icon-circle {
+    background: #b45309;
+    color: white;
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+}
+
+.ctrl-btn.play-btn:hover .icon-circle { background: #92400e; }
+
+.ctrl-btn.stop-btn .icon-circle {
+    background: #fef3c7;
+    color: #b45309;
+    border: 2px solid #fde68a;
+}
+
+.ctrl-btn.stop-btn:hover .icon-circle { background: #fde68a; }
+
+.ctrl-btn.repeat-btn .icon-circle {
+    background: #fef3c7;
+    color: #b45309;
+    border: 2px solid #fde68a;
+}
+
+.ctrl-btn.repeat-btn.active .icon-circle {
+    background: #b45309;
+    color: white;
+    border-color: #b45309;
+}
+
+.ctrl-btn.repeat-btn:hover .icon-circle { background: #fde68a; }
+
+.ctrl-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: bold;
+}
+
+.repeat-badge {
+    display: none;
+    font-size: 0.75rem;
+    background: #b45309;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: -4px;
+}
+
+.repeat-btn.active .repeat-badge { display: inline-block; }
+
+/* Talbiyah text card */
+.text-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border: 1px solid #fef3c7;
+    padding: 32px;
+    text-align: center;
+}
+
+.arabic {
+    font-size: 2rem;
+    color: #b45309;
+    line-height: 2;
+    margin-bottom: 16px;
+    direction: rtl;
+}
+
+.transliteration {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #374151;
+    margin-bottom: 12px;
+    line-height: 1.8;
+}
+
+.translation {
+    font-size: 1rem;
+    color: #6b7280;
+    line-height: 1.8;
+}
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <a class="back-btn" href="index3.html">← Back to Hajj for Kids</a>
+
+    <header>
+        <h1>🗣️ Activity 3</h1>
+        <p>Listen to the Talbiyah — the special prayer pilgrims recite during Hajj.</p>
+    </header>
+
+    <div class="player-card">
+        <div class="audio-icon">🕋</div>
+        <div class="audio-title">Talbiyah</div>
+        <div class="audio-subtitle">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ</div>
+
+        <div class="progress-wrap" id="progress-wrap">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="time-row">
+            <span id="time-current">0:00</span>
+            <span id="time-total">0:00</span>
+        </div>
+
+        <div class="controls">
+
+            <button class="ctrl-btn stop-btn" onclick="stopAudio()" title="Stop">
+                <div class="icon-circle">⏹</div>
+                <span class="ctrl-label">Stop</span>
+            </button>
+
+            <button class="ctrl-btn play-btn" id="play-btn" onclick="togglePlay()" title="Play / Pause">
+                <div class="icon-circle" id="play-icon">▶</div>
+                <span class="ctrl-label" id="play-label">Play</span>
+            </button>
+
+            <button class="ctrl-btn repeat-btn" id="repeat-btn" onclick="toggleRepeat()" title="Repeat">
+                <div class="icon-circle">🔁</div>
+                <span class="ctrl-label">Repeat</span>
+                <span class="repeat-badge">ON</span>
+            </button>
+
+        </div>
+    </div>
+
+    <div class="text-card">
+        <div class="arabic">
+            لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ،<br>
+            لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ،<br>
+            إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ،<br>
+            لَا شَرِيكَ لَكَ
+        </div>
+        <div class="transliteration">
+            Labbayk Allāhumma labbayk,<br>
+            Labbayk lā sharīka laka labbayk,<br>
+            Inna al-ḥamda wa n-ni'mata laka wa l-mulk,<br>
+            Lā sharīka lak
+        </div>
+        <div class="translation">
+            "Here I am, O Allah, here I am.<br>
+            Here I am, You have no partner, here I am.<br>
+            Verily all praise, grace and sovereignty belong to You.<br>
+            You have no partner."
+        </div>
+    </div>
+
+</div>
+
+<audio id="audio" src="audio/Talbiyah.mp3"></audio>
+
+<script>
+
+const audio = document.getElementById("audio");
+const playIcon = document.getElementById("play-icon");
+const playLabel = document.getElementById("play-label");
+const progressBar = document.getElementById("progress-bar");
+const progressWrap = document.getElementById("progress-wrap");
+const timeCurrent = document.getElementById("time-current");
+const timeTotal = document.getElementById("time-total");
+const repeatBtn = document.getElementById("repeat-btn");
+
+let isRepeating = false;
+
+function formatTime(secs) {
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return m + ":" + (s < 10 ? "0" : "") + s;
+}
+
+audio.addEventListener("loadedmetadata", function() {
+    timeTotal.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener("timeupdate", function() {
+    if (audio.duration) {
+        progressBar.style.width = (audio.currentTime / audio.duration * 100) + "%";
+        timeCurrent.textContent = formatTime(audio.currentTime);
+    }
+});
+
+audio.addEventListener("ended", function() {
+    if (isRepeating) {
+        audio.currentTime = 0;
+        audio.play();
+    } else {
+        playIcon.textContent = "▶";
+        playLabel.textContent = "Play";
+        progressBar.style.width = "0%";
+        timeCurrent.textContent = "0:00";
+    }
+});
+
+function togglePlay() {
+    if (audio.paused) {
+        audio.play();
+        playIcon.textContent = "⏸";
+        playLabel.textContent = "Pause";
+    } else {
+        audio.pause();
+        playIcon.textContent = "▶";
+        playLabel.textContent = "Play";
+    }
+}
+
+function stopAudio() {
+    audio.pause();
+    audio.currentTime = 0;
+    playIcon.textContent = "▶";
+    playLabel.textContent = "Play";
+    progressBar.style.width = "0%";
+    timeCurrent.textContent = "0:00";
+}
+
+function toggleRepeat() {
+    isRepeating = !isRepeating;
+    repeatBtn.classList.toggle("active", isRepeating);
+}
+
+progressWrap.addEventListener("click", function(e) {
+    const rect = progressWrap.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = ratio * audio.duration;
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity 1 – Build a Kaaba Replica</title>
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #fffbeb, #ffffff, #fefce8);
+    color: #1f2937;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+.page {
+    max-width: 860px;
+    margin: auto;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 24px;
+    padding: 10px 20px;
+    background: #b45309;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.back-btn:hover { background: #92400e; }
+
+header {
+    text-align: center;
+    padding: 20px 0 32px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    color: #b45309;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.05rem;
+    color: #374151;
+    line-height: 1.8;
+}
+
+section {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 32px;
+    border: 1px solid #fef3c7;
+    margin-bottom: 28px;
+}
+
+section h2 {
+    font-size: 1.6rem;
+    color: #b45309;
+    margin-bottom: 20px;
+}
+
+section h3 {
+    font-size: 1.2rem;
+    color: #92400e;
+    margin: 24px 0 12px;
+}
+
+ul {
+    padding-left: 24px;
+}
+
+ul li {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    margin-bottom: 6px;
+}
+
+p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+}
+
+/* Kaaba image */
+.kaaba-img-wrap {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    border: 2px solid #fde68a;
+    cursor: pointer;
+    position: relative;
+}
+
+.kaaba-img-wrap img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+}
+
+.kaaba-img-wrap:hover img { transform: scale(1.02); }
+
+.kaaba-img-wrap::after {
+    content: "🔍 Click to enlarge";
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    pointer-events: none;
+}
+
+/* Step cards */
+.step-card {
+    background: linear-gradient(to right, #fffbeb, #fefce8);
+    border: 1px solid #fde68a;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+
+.step-title {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: #92400e;
+    margin-bottom: 10px;
+}
+
+.step-card p, .step-card li {
+    font-size: 1rem;
+    line-height: 1.85;
+}
+
+.step-card ol {
+    padding-left: 22px;
+}
+
+.step-card ol li {
+    margin-bottom: 6px;
+}
+
+.divider {
+    border: none;
+    border-top: 2px dashed #fde68a;
+    margin: 8px 0 20px;
+}
+
+.note-box {
+    background: #fef3c7;
+    border-left: 6px solid #f59e0b;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 0.98rem;
+    line-height: 1.8;
+}
+
+/* Lightbox */
+#lightbox {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.88);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#lightbox.active { display: flex; }
+
+#lightbox img {
+    max-width: 92%;
+    max-height: 88vh;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+#lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 28px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 1001;
+}
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <a class="back-btn" href="index3.html">← Back to Hajj for Kids</a>
+
+    <header>
+        <h1>🎨 Activity 1</h1>
+        <p>Learn about the Kaaba and build your own Kaaba replica using simple materials!</p>
+    </header>
+
+    <!-- About the Kaaba -->
+    <section>
+        <h2>🌟 About the Kaaba</h2>
+
+        <div class="kaaba-img-wrap" onclick="document.getElementById('lightbox').classList.add('active')">
+            <img src="imagess/kaaba.jpg" alt="The Kaaba">
+        </div>
+
+        <ul>
+            <li>The Kaaba was built by Prophet Ibrahim (AS) and Prophet Ismail (AS)</li>
+            <li>Muslims face the Kaaba when praying</li>
+            <li>Muslims worship Allah alone — Muslims do <strong>not</strong> worship the Kaaba</li>
+            <li>The Kaaba is in Makkah</li>
+            <li>The Black Stone is part of the Kaaba structure</li>
+        </ul>
+    </section>
+
+    <!-- Build Tutorial -->
+    <section>
+        <h2>🕋 Step-by-Step: Build a Kaaba Replica</h2>
+
+        <h3>✨ Materials Needed</h3>
+        <ul>
+            <li>Small cardboard box or shoebox</li>
+            <li>Black construction paper or black paint</li>
+            <li>Glue or tape</li>
+            <li>Scissors</li>
+            <li>Gold paper or gold marker</li>
+            <li>Gray or silver clay/paper for the Black Stone</li>
+            <li>Ruler</li>
+            <li>Pencil</li>
+        </ul>
+
+        <hr class="divider">
+
+        <div class="step-card">
+            <div class="step-title">Step 1 — Choose the Box</div>
+            <p>Find a box shaped like a rectangle or cube.</p>
+            <p style="margin-top:8px;">Examples:</p>
+            <ul>
+                <li>Shoebox</li>
+                <li>Small package box</li>
+                <li>Tissue box</li>
+            </ul>
+            <p style="margin-top:8px;">This will be the main Kaaba structure.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-title">Step 2 — Cover the Kaaba in Black</div>
+            <p>The Kaaba is covered with a black cloth called the <strong>Kiswah</strong>.</p>
+            <p style="margin-top:8px;">What to do:</p>
+            <ol>
+                <li>Measure each side of the box</li>
+                <li>Cut black paper to fit</li>
+                <li>Glue or tape the black paper around the front, back, sides, and top</li>
+            </ol>
+            <p style="margin-top:8px;">Try to make the paper smooth and neat.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-title">Step 3 — Add the Gold Band</div>
+            <p>Near the top of the Kaaba is a gold-decorated band.</p>
+            <p style="margin-top:8px;">What to do:</p>
+            <ol>
+                <li>Cut a long strip of gold paper</li>
+                <li>Wrap it around the upper part of the Kaaba</li>
+                <li>Glue it carefully</li>
+            </ol>
+            <p style="margin-top:8px;"><em>Optional: Draw simple decorations using a gold marker.</em></p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-title">Step 4 — Make the Kaaba Door</div>
+            <p>The Kaaba has a golden door.</p>
+            <p style="margin-top:8px;">What to do:</p>
+            <ol>
+                <li>Cut a small rectangle from gold paper</li>
+                <li>Glue it onto one side of the Kaaba</li>
+                <li>Place it a little above the ground level</li>
+            </ol>
+        </div>
+
+        <div class="step-card">
+            <div class="step-title">Step 5 — Create the Black Stone (Hajar al-Aswad)</div>
+            <p>The Black Stone is placed at the corner near the left of the Kaaba's door.</p>
+            <p style="margin-top:8px;">What to do:</p>
+            <ol>
+                <li>Roll a tiny piece of gray clay, black clay, or crumpled silver paper</li>
+                <li>Shape it into a small oval</li>
+                <li>Glue it near the lower corner of the Kaaba beside the door area</li>
+            </ol>
+            <p style="margin-top:8px;"><em>You can also draw a silver outline around it.</em></p>
+            <div class="note-box">
+                <strong>Remember:</strong><br>
+                • The Black Stone is called <strong>Hajar al-Aswad</strong><br>
+                • Pilgrims point toward it during Tawaf<br>
+                • Muslims worship Allah alone, not the stone
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-title">Step 6 — Place the Kaaba on a Base</div>
+            <ol>
+                <li>Glue the Kaaba onto cardboard or foam board</li>
+                <li>Leave space around it for Tawaf</li>
+            </ol>
+        </div>
+
+    </section>
+
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="this.classList.remove('active')">
+    <button id="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('active')">✕</button>
+    <img src="imagess/kaaba.jpg" alt="The Kaaba">
+</div>
+
+</body>
+</html>
